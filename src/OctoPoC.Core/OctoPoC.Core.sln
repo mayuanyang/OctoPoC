@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctoPoC.Core", "OctoPoC.Core.csproj", "{C566ADB2-AC7E-49B7-8697-27D4660B2D96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctoPoC.Messages", "..\OctoPoC.Messages\OctoPoC.Messages.csproj", "{011108AF-29E2-4F51-BD57-907DCF3C5AA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctoPoC.Web", "..\OctoPoC.Web\OctoPoC.Web.csproj", "{2C82BB92-0804-4EBE-9F06-A20F0588C978}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C566ADB2-AC7E-49B7-8697-27D4660B2D96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C566ADB2-AC7E-49B7-8697-27D4660B2D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C566ADB2-AC7E-49B7-8697-27D4660B2D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C566ADB2-AC7E-49B7-8697-27D4660B2D96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{011108AF-29E2-4F51-BD57-907DCF3C5AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{011108AF-29E2-4F51-BD57-907DCF3C5AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{011108AF-29E2-4F51-BD57-907DCF3C5AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{011108AF-29E2-4F51-BD57-907DCF3C5AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C82BB92-0804-4EBE-9F06-A20F0588C978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C82BB92-0804-4EBE-9F06-A20F0588C978}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C82BB92-0804-4EBE-9F06-A20F0588C978}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C82BB92-0804-4EBE-9F06-A20F0588C978}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
