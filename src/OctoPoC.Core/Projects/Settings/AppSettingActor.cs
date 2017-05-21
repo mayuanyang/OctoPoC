@@ -1,7 +1,7 @@
 ﻿using Akka.Persistence;
 using OctoPoC.Core.EventStore;
 
-namespace OctoPoC.Core.Settings
+namespace OctoPoC.Core.Projects.Settings
 {
     public class AppSettingActor : ReceivePersistentActor
     {
