@@ -4,18 +4,18 @@ using Akka.Actor;
 using OctoPoC.Messages.Commands;
 using OctoPoC.Messages.Events;
 
-namespace OctoPoC.Core.DeploymentTargets
+namespace OctoPoC.Core.Environments.DeploymentTargets
 {
     public class ListeningTentacleActor : ReceiveActor
     {
         public ListeningTentacleActor()
         {
             var targetId = Guid.NewGuid();
-            Receive<StartHeartbeatCommand>(cmd =>
+            Receive<ReportHeartbeatCommand>(cmd =>
             {
                 while (true)
                 {
-                    Sender.Tell(new TargetPulseEvent(targetId, DateTimeOffset.Now, "Listening Tentacle"));
+                    Sender.Tell(new TargetPulsedEvent(targetId, DateTimeOffset.Now, "Listening Tentacle"));
                     Task.Delay(10000).Wait();
                 }
 

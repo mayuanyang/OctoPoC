@@ -3,7 +3,7 @@ using Akka.DI.AutoFac;
 using Akka.DI.Core;
 using Autofac;
 using OctoPoC.Core;
-using OctoPoC.Core.Servers;
+using OctoPoC.Core.Projects;
 using OctoPoC.Messages.Commands;
 
 namespace OctoPoC.Console
@@ -20,8 +20,10 @@ namespace OctoPoC.Console
             using (var actorSystem = ActorSystem.Create("OctopusSystem"))
             {
                 var propsResolver = new AutoFacDependencyResolver(container, actorSystem);
-                var server = actorSystem.ActorOf(actorSystem.DI().Props<OctopusServerActor>(), "OctopusServer");
-                server.Tell(new StartServerCommand(), server);
+                var server = actorSystem.ActorOf(actorSystem.DI().Props<OctopusSystemActor>(), "OctopusServer");
+                server.Tell(new StartSystemCommand(), server);
+
+                var projectActor = actorSystem.ActorOf(actorSystem.DI().Props<ProjectActor>(), "project");
                 
                 actorSystem.WhenTerminated.Wait();
             }

@@ -2,7 +2,7 @@
 
 namespace OctoPoC.Messages.Commands
 {
-    public class StartServerCommand : ICommand
+    public class StartSystemCommand : ICommand
     {
     }
 }

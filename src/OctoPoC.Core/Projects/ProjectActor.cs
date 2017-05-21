@@ -11,6 +11,7 @@ namespace OctoPoC.Core.Projects
         public ProjectActor(IEventStore eventStore)
         {
             _eventStore = eventStore;
+            PersistenceId = "30a37555-780a-4748-962c-26a4d163f56c";
         }
     
         protected override bool ReceiveRecover(object message)

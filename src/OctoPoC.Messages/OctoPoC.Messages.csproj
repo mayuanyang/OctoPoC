@@ -41,12 +41,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AddAppSettingCommand.cs" />
-    <Compile Include="Commands\StartHeartbeatCommand.cs" />
-    <Compile Include="Commands\StartServerCommand.cs" />
-    <Compile Include="Events\AppSettingUpdatedEven.cs" />
+    <Compile Include="Commands\CheckEnvironmentCommand.cs" />
+    <Compile Include="Commands\DeployProjectCommand.cs" />
+    <Compile Include="Commands\CreateReleaseForProjectCommand.cs" />
+    <Compile Include="Commands\ReportHeartbeatCommand.cs" />
+    <Compile Include="Commands\StartSystemCommand.cs" />
+    <Compile Include="Events\AppSettingUpdatedEvent.cs" />
     <Compile Include="Events\AppSettingAddedEvent.cs" />
+    <Compile Include="Events\ReleaseForProjectCreatedEvent.cs" />
     <Compile Include="Events\ServerStartedEvent.cs" />
-    <Compile Include="Events\TargetPulseEvent.cs" />
+    <Compile Include="Events\TargetPulsedEvent.cs" />
     <Compile Include="MessageContracts\ICommand.cs" />
     <Compile Include="MessageContracts\IEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

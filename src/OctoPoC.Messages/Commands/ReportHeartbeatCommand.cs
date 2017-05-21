@@ -2,7 +2,7 @@
 
 namespace OctoPoC.Messages.Commands
 {
-    public class StartHeartbeatCommand : ICommand
+    public class ReportHeartbeatCommand : ICommand
     {
     }
 }

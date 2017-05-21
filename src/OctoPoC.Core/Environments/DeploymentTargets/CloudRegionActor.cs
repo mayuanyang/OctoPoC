@@ -3,20 +3,19 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using OctoPoC.Messages.Commands;
 using OctoPoC.Messages.Events;
-using System.Timers;
 
-namespace OctoPoC.Core.DeploymentTargets
+namespace OctoPoC.Core.Environments.DeploymentTargets
 {
     public class CloudRegionActor : ReceiveActor
     {
         public CloudRegionActor()
         {
             var targetId = Guid.NewGuid();
-            Receive<StartHeartbeatCommand>(cmd => 
+            Receive<ReportHeartbeatCommand>(cmd => 
             {
                 while (true)
                 {
-                    Sender.Tell(new TargetPulseEvent(targetId, DateTimeOffset.Now, "Cloud Region"));
+                    Sender.Tell(new TargetPulsedEvent(targetId, DateTimeOffset.Now, "Cloud Region"));
                     Task.Delay(10000).Wait();
                 }
                

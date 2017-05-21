@@ -56,20 +56,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacModule.cs" />
+    <Compile Include="Environments\DeployEnvironment.cs" />
+    <Compile Include="Environments\DeploymentTargets\DeploymentTarget.cs" />
+    <Compile Include="Environments\DeploymentTargets\InMemoryTargetLoader.cs" />
+    <Compile Include="Environments\DeploymentTargets\ITargetLoader.cs" />
+    <Compile Include="Environments\DeploymentTargets\TargetStyle.cs" />
+    <Compile Include="Environments\EnvironmentActor.cs" />
+    <Compile Include="Environments\IEnvironmentRepo.cs" />
+    <Compile Include="Environments\InMemoryEnvironmentRepo.cs" />
     <Compile Include="Projects\ProjectActor.cs" />
+    <Compile Include="Projects\ReadmodelGeneration\AppSettingReadmodelActor.cs" />
     <Compile Include="Projects\Settings\AppSettingActor.cs" />
-    <Compile Include="DeploymentTargets\CloudRegionActor.cs" />
-    <Compile Include="DeploymentTargets\ListeningTentacleActor.cs" />
+    <Compile Include="Environments\DeploymentTargets\CloudRegionActor.cs" />
+    <Compile Include="Environments\DeploymentTargets\ListeningTentacleActor.cs" />
     <Compile Include="EventStore\EventRecord.cs" />
     <Compile Include="EventStore\IDomainEvent.cs" />
     <Compile Include="EventStore\IEventStore.cs" />
     <Compile Include="EventStore\InMemoryEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Servers\OctopusServerActor.cs" />
+    <Compile Include="OctopusSystemActor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OctoPoC.Messages\OctoPoC.Messages.csproj">
