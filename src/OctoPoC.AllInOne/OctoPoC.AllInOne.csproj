@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{52E90939-7357-4FF4-9AF0-AD165199C3B7}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>OctoPoC.Console</RootNamespace>
-    <AssemblyName>OctoPoC.Console</AssemblyName>
+    <RootNamespace>OctoPoC.AllInOne</RootNamespace>
+    <AssemblyName>OctoPoC.AllInOne</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

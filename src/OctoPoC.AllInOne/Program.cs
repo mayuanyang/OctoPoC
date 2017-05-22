@@ -6,14 +6,15 @@ using OctoPoC.Core;
 using OctoPoC.Core.Projects;
 using OctoPoC.Messages.Commands;
 
-namespace OctoPoC.Console
+namespace OctoPoC.AllInOne
 {
     class Program
     {
         static void Main(string[] args)
         {
             var builder = new Autofac.ContainerBuilder();
-            builder.RegisterModule<AutofacModule>(); 
+            builder.RegisterModule<AutofacModule>();
+            builder.RegisterType<OctopusSystemActor>();
             var container = builder.Build();
            
 
@@ -22,8 +23,6 @@ namespace OctoPoC.Console
                 var propsResolver = new AutoFacDependencyResolver(container, actorSystem);
                 var server = actorSystem.ActorOf(actorSystem.DI().Props<OctopusSystemActor>(), "OctopusServer");
                 server.Tell(new StartSystemCommand(), server);
-
-                var projectActor = actorSystem.ActorOf(actorSystem.DI().Props<ProjectActor>(), "project");
                 
                 actorSystem.WhenTerminated.Wait();
             }
