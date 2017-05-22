@@ -13,11 +13,12 @@ namespace OctoPoC.Core.Projects
     {
         private IActorRef _sender;
         private string _currentVersion = "";
-        
+        private IActorRef _websiteActor;
 
         public ProjectActor()
         {
             PersistenceId = "30a37555-780a-4748-962c-26a4d163f56c";
+            _websiteActor = Context.ActorOf(Context.DI().Props<DeployWebsiteActor>(), "WebsiteActor");
         }
     
         protected override bool ReceiveRecover(object message)
@@ -25,49 +26,76 @@ namespace OctoPoC.Core.Projects
             if (message is EventRecord)
             {
                 var evt = (EventRecord)message;
-                var websiteEvt = (WebsiteDeployedEvent) evt.Event;
-                Apply(websiteEvt, true);
+                if (evt.Event is WebsiteDeployedEvent)
+                {
+                     Apply((WebsiteDeployedEvent)evt.Event);
+                }
+                else if (evt.Event is AppSettingAddedEvent)
+                {
+                    Apply((AppSettingAddedEvent)evt.Event);
+                }
             }
             return true;
         }
 
         protected override bool ReceiveCommand(object message)
         {
+            var aggregateId = Guid.Parse(PersistenceId);
             if (message is DeployWebsiteCommand)
             {
                 _sender = Sender;
-                var websiteActorProps = Context.DI().Props<DeployWebsiteActor>();
-                var websiteActor = Context.ActorOf(websiteActorProps, "WebsiteActor");
-                websiteActor.Tell(message, Self);
+                _websiteActor.Tell(message, Self);
             }
             else if (message is WebsiteDeployedEvent)
             {
-                var aggregateId = Guid.Parse(PersistenceId);
                 var evt = (WebsiteDeployedEvent) message;
                 Persist<EventRecord>(new EventRecord(Guid.NewGuid(), 1, aggregateId, evt), x =>
                 {
-                    Apply(evt, false);
+                    ApplyChange((WebsiteDeployedEvent)x.Event);
                 });
                 
             }
+            else if (message is AddAppSettingCommand)
+            {
+                _sender = Sender;
+                var m = (AddAppSettingCommand)message;
+                ApplyChange(new AppSettingAddedEvent(aggregateId, m.Key, m.Value));
+            }
+            else if (message is AppSettingAddedEvent)
+            {
+                var evt = (AppSettingAddedEvent)message;
+                Persist<EventRecord>(new EventRecord(Guid.NewGuid(), 1, aggregateId, evt), x =>
+                {
+                    ApplyChange((AppSettingAddedEvent)x.Event);
+                });
+            }
+
             return true;
         }
 
-        private void Apply(WebsiteDeployedEvent evt, bool isFromRecover)
+        private void ApplyChange(WebsiteDeployedEvent evt)
+        {
+            Console.WriteLine(
+                $"Project is deployed, state has been applied to AggregateRoot Project, current version is {evt.Version}");
+            _sender.Tell(evt);
+        }
+
+        private void ApplyChange(AppSettingAddedEvent evt)
+        {
+            Console.WriteLine(
+                $"New setting is added, Key: {evt.Key} Value: {evt.Value}");
+            _sender.Tell(evt);
+        }
+
+        private void Apply(WebsiteDeployedEvent evt)
         {
             _currentVersion = evt.Version;
+            Console.WriteLine($"AggregateRoot Project is being reloaded, applying version number {evt.Version}");
+        }
 
-            if (!isFromRecover)
-            {
-                Console.WriteLine(
-                    $"Project is deployed, state has been applied to AggregateRoot Project, current version is {evt.Version}");
-                _sender.Tell(evt);
-            }
-            else
-            {
-                Console.WriteLine($"AggregateRoot Project is being reloaded, applying version number {evt.Version}");
-            }
-           
+        private void Apply(AppSettingAddedEvent evt)
+        {
+            // Nothing need to be done now
         }
         
 

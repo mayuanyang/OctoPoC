@@ -12,6 +12,9 @@ namespace OctoPoC.ListeningTentacle
     {
         public ProxyActor()
         {
+            
+            var tentacleActor = Context.ActorOf(Context.DI().Props<ListeningTentacleActor>(), "ListeningTentacle");
+            
             Receive<string>(x =>
             {
                 Console.WriteLine($"Receive message: {x}");
@@ -19,17 +22,21 @@ namespace OctoPoC.ListeningTentacle
 
             Receive<ReportHeartbeatCommand>(x =>
             {
-                var tentacleActorProps = Context.DI().Props<ListeningTentacleActor>();
-                var tentacleActor = Context.ActorOf(tentacleActorProps, "ListeningTentacle");
                 tentacleActor.Tell(x, Sender);
             });
 
             Receive<DeployWebsiteCommand>(x =>
             {
-                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{x.Version}");
+                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
                 project.Tell(x, Sender);
             });
 
+            Receive<AddAppSettingCommand>(x =>
+            {
+                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
+                project.Tell(x, Sender);
+            
+            });
         }
     }
 }

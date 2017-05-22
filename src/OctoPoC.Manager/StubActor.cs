@@ -5,7 +5,12 @@ using OctoPoC.Messages.Events;
 
 namespace OctoPoC.Manager
 {
-    class StubActor : TypedActor, IHandle<ConnectToTargetsCommand>, IHandle<TargetPulsedEvent>, IHandle<DeployWebsiteCommand>, IHandle<WebsiteDeployedEvent>
+    class StubActor : TypedActor, 
+        IHandle<ConnectToTargetsCommand>, 
+        IHandle<TargetPulsedEvent>, 
+        IHandle<DeployWebsiteCommand>, 
+        IHandle<WebsiteDeployedEvent>,
+        IHandle<AddAppSettingCommand>
     {
         private readonly ActorSelection _cloudServer;
         private readonly ActorSelection _listeningTentacle;
@@ -34,7 +39,12 @@ namespace OctoPoC.Manager
 
         public void Handle(WebsiteDeployedEvent message)
         {
-            Console.WriteLine($"Website {message.WebsiteName} has been successfully deployed");
+            Console.WriteLine($"Website {message.WebsiteName} has been successfully deployed, current version is {message.Version}");
+        }
+
+        public void Handle(AddAppSettingCommand message)
+        {
+            _listeningTentacle.Tell(message);
         }
     }
 }
