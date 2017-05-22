@@ -3,7 +3,6 @@ using Akka.Actor;
 using Akka.DI.Core;
 using OctoPoC.Core.Environments.DeploymentTargets;
 using OctoPoC.Messages.Commands;
-using OctoPoC.Messages.Events;
 
 namespace OctoPoC.Core.Environments
 {
@@ -21,16 +20,10 @@ namespace OctoPoC.Core.Environments
                 var couldRegioinActorProps = Context.DI().Props<CloudRegionActor>();
                 var couldRegioinActor = Context.ActorOf(couldRegioinActorProps, "CloudRegionActor");
                 
-                listeningTentacleActor.Tell(new ReportHeartbeatCommand(), Self);
-                couldRegioinActor.Tell(new ReportHeartbeatCommand(), Self);
+                listeningTentacleActor.Tell(new ReportHeartbeatCommand(), Sender);
+                couldRegioinActor.Tell(new ReportHeartbeatCommand(), Sender);
             });
-
-            Receive<TargetPulsedEvent>(x =>
-            {
-                Console.WriteLine($"Heartbeat: [{x.TargetType}] Id: {x.TargetId} at {x.DateTimeOffset}");
-            });
-
-
+            
         }
     }
 }

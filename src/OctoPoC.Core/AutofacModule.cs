@@ -12,7 +12,6 @@ namespace OctoPoC.Core
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<InMemoryEventStore>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<OctopusSystemActor>();
             builder.RegisterType<EnvironmentActor>();
             builder.RegisterType<CloudRegionActor>();
             builder.RegisterType<ListeningTentacleActor>();

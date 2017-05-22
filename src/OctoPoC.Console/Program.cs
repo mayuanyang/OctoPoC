@@ -17,7 +17,7 @@ namespace OctoPoC.Console
             var container = builder.Build();
            
 
-            using (var actorSystem = ActorSystem.Create("OctopusSystem"))
+            using (var actorSystem = ActorSystem.Create("OctopusManager"))
             {
                 var propsResolver = new AutoFacDependencyResolver(container, actorSystem);
                 var server = actorSystem.ActorOf(actorSystem.DI().Props<OctopusSystemActor>(), "OctopusServer");

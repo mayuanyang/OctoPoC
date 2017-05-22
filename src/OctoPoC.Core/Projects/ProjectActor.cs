@@ -25,6 +25,7 @@ namespace OctoPoC.Core.Projects
             Console.WriteLine(nameof(ReceiveCommand));
             return true;
         }
+        
 
         public override string PersistenceId { get; }
     }
