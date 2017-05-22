@@ -1,8 +1,10 @@
 ﻿using System;
 using Akka.Actor;
 using Akka.DI.Core;
-using OctoPoC.Core.Environments.DeploymentTargets;
+using OctoPoC.Core.DeploymentTargets;
+using OctoPoC.Core.Projects;
 using OctoPoC.Messages.Commands;
+using OctoPoC.Messages.Events;
 
 namespace OctoPoC.ListeningTentacle
 {
@@ -21,6 +23,13 @@ namespace OctoPoC.ListeningTentacle
                 var tentacleActor = Context.ActorOf(tentacleActorProps, "ListeningTentacle");
                 tentacleActor.Tell(x, Sender);
             });
+
+            Receive<DeployWebsiteCommand>(x =>
+            {
+                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), "project");
+                project.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", null), Sender);
+            });
+
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Akka.Actor;
 using Akka.DI.Core;
-using OctoPoC.Core.Environments.DeploymentTargets;
+using OctoPoC.Core.DeploymentTargets;
 using OctoPoC.Messages.Commands;
 
 namespace OctoPoC.Core.Environments

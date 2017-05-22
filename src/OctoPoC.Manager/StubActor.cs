@@ -5,7 +5,7 @@ using OctoPoC.Messages.Events;
 
 namespace OctoPoC.Manager
 {
-    class StubActor : TypedActor, IHandle<ConnectToTargetsCommand>, IHandle<TargetPulsedEvent>
+    class StubActor : TypedActor, IHandle<ConnectToTargetsCommand>, IHandle<TargetPulsedEvent>, IHandle<DeployWebsiteCommand>, IHandle<WebsiteDeployedEvent>
     {
         private readonly ActorSelection _cloudServer;
         private readonly ActorSelection _listeningTentacle;
@@ -25,6 +25,16 @@ namespace OctoPoC.Manager
         public void Handle(TargetPulsedEvent x)
         {
             Console.WriteLine($"Heartbeat: [{x.TargetType}] Id: {x.TargetId} at {x.DateTimeOffset}");
+        }
+
+        public void Handle(DeployWebsiteCommand message)
+        {
+            _listeningTentacle.Tell(message);
+        }
+
+        public void Handle(WebsiteDeployedEvent message)
+        {
+            Console.WriteLine($"Website {message.WebsiteName} has been successfully deployed");
         }
     }
 }

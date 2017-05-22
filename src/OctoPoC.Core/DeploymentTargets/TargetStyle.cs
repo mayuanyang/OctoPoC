@@ -1,4 +1,4 @@
-﻿namespace OctoPoC.Core.Environments.DeploymentTargets
+﻿namespace OctoPoC.Core.DeploymentTargets
 {
     public enum TargetStyle
     {

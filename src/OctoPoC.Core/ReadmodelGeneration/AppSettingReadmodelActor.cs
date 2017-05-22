@@ -2,7 +2,7 @@
 using Akka.Actor;
 using OctoPoC.Messages.Events;
 
-namespace OctoPoC.Core.Projects.ReadmodelGeneration
+namespace OctoPoC.Core.ReadmodelGeneration
 {
     class AppSettingReadmodelActor : ReceiveActor
     {

@@ -1,7 +1,7 @@
 ﻿using Akka.Persistence;
 using OctoPoC.Core.EventStore;
 
-namespace OctoPoC.Core.Projects.Settings
+namespace OctoPoC.Core.Settings
 {
     public class AppSettingActor : ReceivePersistentActor
     {
@@ -13,10 +13,6 @@ namespace OctoPoC.Core.Projects.Settings
             _eventStore = eventStore;
         }
 
-        protected override bool Receive(object message)
-        {
-            return base.Receive(message);
-        }
     }
 
     

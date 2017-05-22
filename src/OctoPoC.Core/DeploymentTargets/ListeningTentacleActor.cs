@@ -4,22 +4,21 @@ using Akka.Actor;
 using OctoPoC.Messages.Commands;
 using OctoPoC.Messages.Events;
 
-namespace OctoPoC.Core.Environments.DeploymentTargets
+namespace OctoPoC.Core.DeploymentTargets
 {
-    public class CloudRegionActor : ReceiveActor
+    public class ListeningTentacleActor : ReceiveActor
     {
-        public CloudRegionActor()
+        public ListeningTentacleActor()
         {
             var targetId = Guid.NewGuid();
-            Receive<ReportHeartbeatCommand>(cmd => 
+            Receive<ReportHeartbeatCommand>(cmd =>
             {
                 while (true)
                 {
-                    Sender.Tell(new TargetPulsedEvent(targetId, DateTimeOffset.Now, "Cloud Region"));
+                    Sender.Tell(new TargetPulsedEvent(targetId, DateTimeOffset.Now, "Listening Tentacle"));
                     Task.Delay(10000).Wait();
                 }
-               
-               
+
             });
         }
     }

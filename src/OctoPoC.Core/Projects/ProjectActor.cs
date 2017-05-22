@@ -1,6 +1,11 @@
 ﻿using System;
+using Akka.Actor;
+using Akka.DI.Core;
 using Akka.Persistence;
 using OctoPoC.Core.EventStore;
+using OctoPoC.Core.Websites;
+using OctoPoC.Messages.Commands;
+using OctoPoC.Messages.Events;
 
 namespace OctoPoC.Core.Projects
 {
@@ -16,17 +21,23 @@ namespace OctoPoC.Core.Projects
     
         protected override bool ReceiveRecover(object message)
         {
-            Console.WriteLine(nameof(ReceiveRecover));
+            Console.WriteLine(message.GetType().Name);
             return true;
         }
 
         protected override bool ReceiveCommand(object message)
         {
-            Console.WriteLine(nameof(ReceiveCommand));
+            if (message is DeployWebsiteCommand)
+            {
+                var websiteActorProps = Context.DI().Props<DeployWebsiteActor>();
+                var websiteActor = Context.ActorOf(websiteActorProps, "WebsiteActor");
+                websiteActor.Tell(message, Sender);
+            } 
             return true;
         }
         
 
         public override string PersistenceId { get; }
+        
     }
 }

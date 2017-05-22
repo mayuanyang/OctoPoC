@@ -1,6 +1,8 @@
 ﻿using System;
 using Akka.Actor;
 using Akka.Configuration;
+using OctoPoC.Core.Projects;
+using OctoPoC.Messages.Commands;
 
 namespace OctoPoC.Manager
 {
@@ -22,11 +24,26 @@ akka {
 }
 ");
 
+            Console.WriteLine("1: Check targets");
+            Console.WriteLine("2: Deploy a Demo website");
+            var option = Console.ReadLine();
+            
+
             using (var system = ActorSystem.Create("OctopusManager", config))
             {
-                var stub = system.ActorOf<StubActor>("stub");
-                stub.Tell(new ConnectToTargetsCommand());
 
+                if (option == "1")
+                {
+                    var stub = system.ActorOf<StubActor>("stub");
+                    stub.Tell(new ConnectToTargetsCommand());
+                }
+                else if (option == "2")
+                {
+                    var stub = system.ActorOf<StubActor>("stub");
+                    stub.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", null), stub);
+
+                }
+                
                 Console.ReadLine();
             }
         }

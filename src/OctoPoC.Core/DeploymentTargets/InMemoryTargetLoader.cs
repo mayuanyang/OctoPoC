@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Policy;
 
-namespace OctoPoC.Core.Environments.DeploymentTargets
+namespace OctoPoC.Core.DeploymentTargets
 {
     public class InMemoryTargetLoader : ITargetLoader
     {

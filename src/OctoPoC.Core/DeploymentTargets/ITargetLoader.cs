@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OctoPoC.Core.Environments.DeploymentTargets
+namespace OctoPoC.Core.DeploymentTargets
 {
     public interface ITargetLoader
     {

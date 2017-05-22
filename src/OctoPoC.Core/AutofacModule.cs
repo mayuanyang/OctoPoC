@@ -1,9 +1,11 @@
 ﻿using Autofac;
+using OctoPoC.Core.DeploymentTargets;
 using OctoPoC.Core.Environments;
-using OctoPoC.Core.Environments.DeploymentTargets;
 using OctoPoC.Core.EventStore;
+using OctoPoC.Core.PowerShell;
 using OctoPoC.Core.Projects;
-using OctoPoC.Core.Projects.Settings;
+using OctoPoC.Core.Settings;
+using OctoPoC.Core.Websites;
 
 namespace OctoPoC.Core
 {
@@ -17,6 +19,8 @@ namespace OctoPoC.Core
             builder.RegisterType<ListeningTentacleActor>();
             builder.RegisterType<AppSettingActor>();
             builder.RegisterType<ProjectActor>();
+            builder.RegisterType<PowerShellActor>();
+            builder.RegisterType<DeployWebsiteActor>();
             builder.RegisterType<InMemoryEnvironmentRepo>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<InMemoryTargetLoader>().AsImplementedInterfaces().SingleInstance();
         }

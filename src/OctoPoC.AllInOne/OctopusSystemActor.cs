@@ -11,6 +11,7 @@ namespace OctoPoC.AllInOne
     {
         public void Handle(StartSystemCommand message)
         {
+            
             Console.WriteLine("StartSystemCommand received");
             Sender.Tell(new ServerStartedEvent());
 
@@ -25,5 +26,6 @@ namespace OctoPoC.AllInOne
             Console.WriteLine($"Heartbeat: [{x.TargetType}] Id: {x.TargetId} at {x.DateTimeOffset}");
             
         }
+
     }
 }
