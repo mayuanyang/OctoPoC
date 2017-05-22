@@ -26,8 +26,8 @@ namespace OctoPoC.ListeningTentacle
 
             Receive<DeployWebsiteCommand>(x =>
             {
-                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), "project");
-                project.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", null), Sender);
+                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{x.Version}");
+                project.Tell(x, Sender);
             });
 
         }

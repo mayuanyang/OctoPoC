@@ -10,7 +10,7 @@ namespace OctoPoC.Core.Websites
         public void Handle(DeployWebsiteCommand message)
         {
             Console.WriteLine($"Trying to deploy website {message.WebsiteName}");
-            Sender.Tell(new WebsiteDeployedEvent(message.WebsiteName));
+            Sender.Tell(new WebsiteDeployedEvent(message.WebsiteName, message.Version));
         }
     }
 }

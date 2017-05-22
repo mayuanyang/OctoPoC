@@ -4,7 +4,6 @@ using Akka.DI.AutoFac;
 using Akka.DI.Core;
 using Autofac;
 using OctoPoC.Core;
-using OctoPoC.Core.PowerShell;
 using OctoPoC.Core.Projects;
 using OctoPoC.Messages.Commands;
 
@@ -33,7 +32,7 @@ namespace OctoPoC.AllInOne
                 else if (option == "2")
                 {
                     var project = actorSystem.ActorOf(actorSystem.DI().Props<ProjectActor>(), "project");
-                    project.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", null), project);
+                    project.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", "1.0.0", null), project);
 
                 }
                 

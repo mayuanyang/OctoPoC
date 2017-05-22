@@ -1,4 +1,5 @@
 ﻿using System;
+using OctoPoC.Messages.MessageContracts;
 
 namespace OctoPoC.Core.EventStore
 {
@@ -7,9 +8,9 @@ namespace OctoPoC.Core.EventStore
         public Guid Id { get; }
         public long Sequence { get; }
         public Guid AggregateId { get; }
-        public IDomainEvent Event { get; }
+        public IEvent Event { get; }
 
-        public EventRecord(Guid id, long sequence, Guid aggregateId, IDomainEvent @event)
+        public EventRecord(Guid id, long sequence, Guid aggregateId, IEvent @event)
         {
             Id = id;
             Sequence = sequence;

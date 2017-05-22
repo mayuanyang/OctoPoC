@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using OctoPoC.Core.DeploymentTargets;
 using OctoPoC.Core.Environments;
-using OctoPoC.Core.EventStore;
 using OctoPoC.Core.PowerShell;
 using OctoPoC.Core.Projects;
 using OctoPoC.Core.Settings;
@@ -13,7 +12,6 @@ namespace OctoPoC.Core
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<InMemoryEventStore>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<EnvironmentActor>();
             builder.RegisterType<CloudRegionActor>();
             builder.RegisterType<ListeningTentacleActor>();

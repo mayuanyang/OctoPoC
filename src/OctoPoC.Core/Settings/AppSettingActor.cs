@@ -1,17 +1,10 @@
-﻿using Akka.Persistence;
-using OctoPoC.Core.EventStore;
+﻿using Akka.Actor;
 
 namespace OctoPoC.Core.Settings
 {
-    public class AppSettingActor : ReceivePersistentActor
+    public class AppSettingActor : TypedActor
     {
-        private readonly IEventStore _eventStore;
-        public override string PersistenceId { get; }
-
-        public AppSettingActor(IEventStore eventStore)
-        {
-            _eventStore = eventStore;
-        }
+       
 
     }
 

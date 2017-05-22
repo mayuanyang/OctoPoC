@@ -27,7 +27,7 @@ akka {
             Console.WriteLine("1: Check targets");
             Console.WriteLine("2: Deploy a Demo website");
             var option = Console.ReadLine();
-            
+            int version = 1;
 
             using (var system = ActorSystem.Create("OctopusManager", config))
             {
@@ -40,9 +40,9 @@ akka {
                     }
                     else if (option == "2")
                     {
-                        var stub = system.ActorOf<StubActor>("stub-deploy");
-                        stub.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", null), stub);
-
+                        var stub = system.ActorOf<StubActor>($"stub-deploy-{version}");
+                        stub.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", $"{version}.0.0", null), stub);
+                        version += 1;
                     }
 
                     option = Console.ReadLine();
