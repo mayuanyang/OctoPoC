@@ -31,20 +31,23 @@ akka {
 
             using (var system = ActorSystem.Create("OctopusManager", config))
             {
-
-                if (option == "1")
+                while (true)
                 {
-                    var stub = system.ActorOf<StubActor>("stub");
-                    stub.Tell(new ConnectToTargetsCommand());
-                }
-                else if (option == "2")
-                {
-                    var stub = system.ActorOf<StubActor>("stub");
-                    stub.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", null), stub);
+                    if (option == "1")
+                    {
+                        var stub = system.ActorOf<StubActor>("stub-heartbeat");
+                        stub.Tell(new ConnectToTargetsCommand());
+                    }
+                    else if (option == "2")
+                    {
+                        var stub = system.ActorOf<StubActor>("stub-deploy");
+                        stub.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", null), stub);
 
+                    }
+
+                    option = Console.ReadLine();
                 }
                 
-                Console.ReadLine();
             }
         }
     }
