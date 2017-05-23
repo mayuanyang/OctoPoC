@@ -5,6 +5,7 @@ using Akka.Configuration;
 using Akka.DI.AutoFac;
 using Autofac;
 using Autofac.Integration.WebApi;
+using Newtonsoft.Json.Serialization;
 using OctoPoC.Core;
 using OctoPoC.Messages.Commands;
 
@@ -15,7 +16,10 @@ namespace OctoPoC.WebApi
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            
+            HttpConfiguration httpconfig = GlobalConfiguration.Configuration;
+            httpconfig.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            httpconfig.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
+
             var builder = new ContainerBuilder();
             builder.RegisterModule<AutofacModule>();
             builder.RegisterApiControllers(typeof(WebApiApplication).Assembly);

@@ -1,13 +1,40 @@
 <template>
-  <require from="../readme/read-me"></require>
   <div class="container">
     <h3>App Settings </h3>
     <button class="btn btn-primary" click.trigger="getSettings()" >Get Settings</button>
-    <div class="row" repeat.for="setting of settings.ProjectAppSettings" style="margin-bottom:10px; margin-top: 10px;">
+    <div class="row"   style="margin-bottom:10px; margin-top: 10px;">
+      
       <div class="col-md-6">
-        <a href="https://www.youtube.com/watch?v=${result.id.videoId}" target="_blank">
-          <img src="${result.snippet.thumbnails.high.url}" class="img-rounded video-thumb" alt="" />
-        </a>
+        <h4>App Settings</h4>
+        <table class="table table-bordered">
+          <tr>
+          <th>Key</th>
+          <th>Value</th>
+          <th>Time</th>
+          </tr>
+          <tr repeat.for="setting of settings.projectAppSettings">
+            <td>${setting.key}</td>
+            <td>${setting.value}</td>
+            <td>${setting.recordTime}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <h4>App Settings Audit Trail</h4>
+<table class="table table-bordered">
+          <tr>
+          <th>Key</th>
+          <th>Value</th>
+          <th>Time</th>
+          <th>Operation</th>
+          </tr>
+          <tr class="${setting.operation == 'UPDATE' ? 'warning' : '' }" repeat.for="setting of settings.auditableProjectAppSettings">
+            <td>${setting.key}</td>
+            <td>${setting.value}</td>
+            <td>${setting.recordTime}</td>
+            <td>${setting.operation}</td>
+          </tr>
+        </table>
       </div>
     </div>
   </div>
