@@ -61,6 +61,7 @@
     <Compile Include="Commands\UpdateAppSettingCommand.cs" />
     <Compile Include="RequestResponses\GetAllAppSettingsResponse.cs" />
     <Compile Include="RequestResponses\GetAllAppSettingsRequest.cs" />
+    <Compile Include="RequestResponses\ProjectAppSettingDiffDto.cs" />
     <Compile Include="RequestResponses\ProjectAppSettingDto.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
