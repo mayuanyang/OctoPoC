@@ -15,6 +15,7 @@ namespace OctoPoC.WebApi
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            
             var builder = new ContainerBuilder();
             builder.RegisterModule<AutofacModule>();
             builder.RegisterApiControllers(typeof(WebApiApplication).Assembly);

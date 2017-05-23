@@ -1,0 +1,13 @@
+<template>
+  <div class="panel panel-${style}" style="margin-top:10px;">
+    <div class="panel-heading"><span class="glyphicon glyphicon-info-sign"></span>${title}</div>
+    <div class="panel-body">
+      <p class="readme-descriptioin">${description}</p>
+      <p></p>
+      <b>Important things covered in this pratice</b>
+      <ul class="list-group">
+        <li class="list-group-item" repeat.for="item of items">${item.description}</li>
+      </ul>
+    </div>
+  </div>
+</template>

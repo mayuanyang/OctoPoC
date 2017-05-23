@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Akka.Actor;
 using OctoPoC.Messages.RequestResponses;
 
 namespace OctoPoC.WebApi.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class OctopusManagerController : ApiController
     {
         private readonly ActorSystem _actorSystem;
