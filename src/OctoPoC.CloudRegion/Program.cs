@@ -34,7 +34,7 @@ akka {
             using (var actorSystem = ActorSystem.Create("OctopusCloudRegionTarget", config))
             {
                 var propsResolver = new AutoFacDependencyResolver(container, actorSystem);
-                actorSystem.ActorOf<ProxyActor>("Proxy");
+                actorSystem.ActorOf<CloudRegionEndpointActor>("Proxy");
                 
                 actorSystem.WhenTerminated.Wait();
             }

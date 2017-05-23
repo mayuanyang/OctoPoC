@@ -6,9 +6,9 @@ using OctoPoC.Messages.Commands;
 
 namespace OctoPoC.CloudRegion
 {
-    class ProxyActor : ReceiveActor
+    class CloudRegionEndpointActor : ReceiveActor
     {
-        public ProxyActor()
+        public CloudRegionEndpointActor()
         {
             Receive<string>(x =>
             {

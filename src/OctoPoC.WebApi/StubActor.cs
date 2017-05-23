@@ -14,12 +14,10 @@ namespace OctoPoC.WebApi
         IHandle<AppSettingAddedEvent>,
         IHandle<GetAllAppSettingsRequest>
     {
-        private readonly ActorSelection _cloudServer;
-        private readonly ActorSelection _listeningTentacle;
+        private readonly ActorSelection _server;
         public StubActor()
         {
-             _cloudServer = Context.ActorSelection("akka.tcp://OctopusCloudRegionTarget@localhost:9082/user/Proxy");
-            _listeningTentacle = Context.ActorSelection("akka.tcp://OctopusListeningTentacleTarget@localhost:9081/user/Proxy");
+             _server = Context.ActorSelection("akka.tcp://OctopusServer@localhost:9080/user/server-endpoint");
         }
         
         public void Handle(TargetPulsedEvent x)
@@ -29,7 +27,7 @@ namespace OctoPoC.WebApi
 
         public void Handle(DeployWebsiteCommand message)
         {
-            _listeningTentacle.Tell(message);
+            _server.Tell(message);
         }
 
         public void Handle(WebsiteDeployedEvent message)
@@ -39,12 +37,12 @@ namespace OctoPoC.WebApi
 
         public void Handle(AddAppSettingCommand message)
         {
-            _listeningTentacle.Tell(message);
+            _server.Tell(message);
         }
 
         public void Handle(UpdateAppSettingCommand message)
         {
-            _listeningTentacle.Tell(message);
+            _server.Tell(message);
         }
 
         public void Handle(AppSettingAddedEvent message)
@@ -59,7 +57,7 @@ namespace OctoPoC.WebApi
 
         public void Handle(GetAllAppSettingsRequest message)
         {
-            _listeningTentacle.Tell(message, Sender);
+            _server.Tell(message, Sender);
         }
     }
 }

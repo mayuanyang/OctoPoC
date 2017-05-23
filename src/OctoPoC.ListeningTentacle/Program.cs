@@ -33,7 +33,7 @@ akka {
             using (var actorSystem = ActorSystem.Create("OctopusListeningTentacleTarget", config))
             {
                 var propsResolver = new AutoFacDependencyResolver(container, actorSystem);
-                actorSystem.ActorOf<ProxyActor>("Proxy");
+                actorSystem.ActorOf<ListeningTentacleEndpointActor>("Proxy");
                 actorSystem.WhenTerminated.Wait();
             }
         }

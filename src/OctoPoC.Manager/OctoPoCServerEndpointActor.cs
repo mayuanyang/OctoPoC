@@ -1,12 +1,15 @@
 ﻿using System;
 using Akka.Actor;
+using Akka.DI.Core;
+using OctoPoC.Core.Projects;
+using OctoPoC.Core.ReadLayer;
 using OctoPoC.Messages.Commands;
 using OctoPoC.Messages.Events;
 using OctoPoC.Messages.RequestResponses;
 
 namespace OctoPoC.Manager
 {
-    class StubActor : TypedActor, 
+    class OctoPoCServerEndpointActor : TypedActor, 
         IHandle<ConnectToTargetsCommand>, 
         IHandle<TargetPulsedEvent>, 
         IHandle<DeployWebsiteCommand>, 
@@ -17,7 +20,7 @@ namespace OctoPoC.Manager
     {
         private readonly ActorSelection _cloudServer;
         private readonly ActorSelection _listeningTentacle;
-        public StubActor()
+        public OctoPoCServerEndpointActor()
         {
              _cloudServer = Context.ActorSelection("akka.tcp://OctopusCloudRegionTarget@localhost:9082/user/Proxy");
             _listeningTentacle = Context.ActorSelection("akka.tcp://OctopusListeningTentacleTarget@localhost:9081/user/Proxy");
@@ -47,12 +50,14 @@ namespace OctoPoC.Manager
 
         public void Handle(AddAppSettingCommand message)
         {
-            _listeningTentacle.Tell(message);
+            var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
+            project.Tell(message, Self);
         }
 
         public void Handle(UpdateAppSettingCommand message)
         {
-            _listeningTentacle.Tell(message);
+            var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
+            project.Tell(message, Self);
         }
 
         public void Handle(AppSettingAddedEvent message)
@@ -67,7 +72,9 @@ namespace OctoPoC.Manager
 
         public void Handle(GetAllAppSettingsRequest message)
         {
-            _listeningTentacle.Tell(message, Sender);
+            var settingQueryActor = Context.ActorOf(Context.DI().Props<AppSettingsReadActor>(),
+                $"setting-reader-{Guid.NewGuid()}");
+            settingQueryActor.Tell(message, Sender);
         }
     }
 }

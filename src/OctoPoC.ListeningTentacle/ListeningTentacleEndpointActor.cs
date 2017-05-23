@@ -10,9 +10,9 @@ using OctoPoC.Messages.RequestResponses;
 
 namespace OctoPoC.ListeningTentacle
 {
-    class ProxyActor : ReceiveActor
+    class ListeningTentacleEndpointActor : ReceiveActor
     {
-        public ProxyActor()
+        public ListeningTentacleEndpointActor()
         {
             
             var tentacleActor = Context.ActorOf(Context.DI().Props<ListeningTentacleActor>(), "ListeningTentacle");
@@ -33,25 +33,7 @@ namespace OctoPoC.ListeningTentacle
                 project.Tell(x, Sender);
             });
 
-            Receive<AddAppSettingCommand>(x =>
-            {
-                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
-                project.Tell(x, Sender);
             
-            });
-
-            Receive<UpdateAppSettingCommand>(x =>
-            {
-                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
-                project.Tell(x, Sender);
-            });
-
-            Receive<GetAllAppSettingsRequest>(x =>
-            {
-                var settingQueryActor = Context.ActorOf(Context.DI().Props<AppSettingsReadActor>(),
-                    $"setting-reader-{Guid.NewGuid()}");
-                settingQueryActor.Tell(x, Sender);
-            });
         }
     }
 }

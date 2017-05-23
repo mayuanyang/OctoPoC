@@ -1,6 +1,9 @@
 ﻿using System;
 using Akka.Actor;
 using Akka.Configuration;
+using Akka.DI.AutoFac;
+using Autofac;
+using OctoPoC.Core;
 using OctoPoC.Core.Projects;
 using OctoPoC.Messages.Commands;
 using OctoPoC.Messages.RequestResponses;
@@ -18,24 +21,30 @@ akka {
     }
     remote {
         dot-netty.tcp {
-            port = 0
-            hostname = localhost
+            port = 9080
+            hostname = 0.0.0.0
+            public-hostname = localhost
         }
     }
 }
 ");
+            var builder = new Autofac.ContainerBuilder();
+            builder.RegisterModule<AutofacModule>();
+            var container = builder.Build();
 
             Console.WriteLine("1: Check targets");
             Console.WriteLine("2: Deploy a Demo website");
             Console.WriteLine("3: Add a setting");
             Console.WriteLine("4: Update a setting");
             Console.WriteLine("5: Get all settings");
-            var option = Console.ReadLine();
-            int version = 1;
             
-            using (var system = ActorSystem.Create("OctopusManager", config))
+            
+            using (var system = ActorSystem.Create("OctopusServer", config))
             {
-                var stub = system.ActorOf<StubActor>("stub");
+                var propsResolver = new AutoFacDependencyResolver(container, system);
+                var stub = system.ActorOf<OctoPoCServerEndpointActor>("server-endpoint");
+                var option = "";
+                int version = 1;
                 while (true)
                 {
                     if (option == "1")
