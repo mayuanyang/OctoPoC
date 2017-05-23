@@ -4,7 +4,6 @@ using Akka.DI.Core;
 using OctoPoC.Core.DeploymentTargets;
 using OctoPoC.Core.Projects;
 using OctoPoC.Messages.Commands;
-using OctoPoC.Messages.Events;
 
 namespace OctoPoC.ListeningTentacle
 {
@@ -36,6 +35,13 @@ namespace OctoPoC.ListeningTentacle
                 var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
                 project.Tell(x, Sender);
             
+            });
+
+            Receive<UpdateAppSettingCommand>(x =>
+            {
+                var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
+                project.Tell(x, Sender);
+
             });
         }
     }

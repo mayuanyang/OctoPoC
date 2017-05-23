@@ -27,6 +27,7 @@ akka {
             Console.WriteLine("1: Check targets");
             Console.WriteLine("2: Deploy a Demo website");
             Console.WriteLine("3: Add a setting");
+            Console.WriteLine("4: Update a setting");
             var option = Console.ReadLine();
             int version = 1;
             
@@ -43,15 +44,23 @@ akka {
                     {
                         stub.Tell(new DeployWebsiteCommand("helloworld", "helloworld", "9876", $"{version}.0.0", null), stub);
                         version += 1;
-                    }else if (option == "3")
+                    }
+                    else if (option == "3")
                     {
                         Console.WriteLine("Enter the key");
                         var key = Console.ReadLine();
                         Console.WriteLine("Enter the value");
                         var value = Console.ReadLine();
-                        stub.Tell(new AddAppSettingCommand(Guid.NewGuid(), key, value));
+                        stub.Tell(new AddAppSettingCommand(Guid.NewGuid(), key, value, "1", DateTimeOffset.Now));
                     }
-
+                    else if (option == "4")
+                    {
+                        Console.WriteLine("Enter the key");
+                        var key = Console.ReadLine();
+                        Console.WriteLine("Enter the value");
+                        var value = Console.ReadLine();
+                        stub.Tell(new UpdateAppSettingCommand(Guid.NewGuid(), key, value, "1", DateTimeOffset.Now));
+                    }
                     option = Console.ReadLine();
                 }
                 

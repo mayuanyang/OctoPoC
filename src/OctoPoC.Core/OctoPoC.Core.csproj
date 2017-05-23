@@ -83,6 +83,7 @@
     <Compile Include="DeploymentTargets\ListeningTentacleActor.cs" />
     <Compile Include="EventStore\EventRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\SettingActor.cs" />
     <Compile Include="Websites\DeployWebsiteActor.cs" />
   </ItemGroup>
   <ItemGroup>

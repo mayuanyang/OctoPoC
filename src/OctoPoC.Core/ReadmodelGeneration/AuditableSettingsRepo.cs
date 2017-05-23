@@ -13,15 +13,12 @@ namespace OctoPoC.Core.ReadmodelGeneration
         }
         public void Add(AppSettingAddedEvent evt)
         {
-            _settings.Add(new SettingDto(evt.ProjectId, evt.Key, evt.Value, evt.Version, evt.RecordTime, ""));
+            _settings.Add(new SettingDto(evt.ProjectId, evt.Key, evt.Value, evt.Version, evt.RecordTime, "INSERT"));
         }
 
         public void Update(AppSettingUpdatedEvent evt)
         {
-            var setting = _settings.Single(x => x.Key == evt.Key);
-            setting.Value = evt.Value;
-            setting.RecordTime = evt.RecordTime;
-            setting.Version = evt.Version;
+            _settings.Add(new SettingDto(evt.ProjectId, evt.Key, evt.Value, evt.Version, evt.RecordTime, "UPDATE"));
         }
     }
 }

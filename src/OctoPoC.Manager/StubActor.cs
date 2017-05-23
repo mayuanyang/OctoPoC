@@ -48,9 +48,19 @@ namespace OctoPoC.Manager
             _listeningTentacle.Tell(message);
         }
 
+        public void Handle(UpdateAppSettingCommand message)
+        {
+            _listeningTentacle.Tell(message);
+        }
+
         public void Handle(AppSettingAddedEvent message)
         {
             Console.WriteLine($"AppSetting Key: {message.Key} Value: {message.Value} has been successfully added");
+        }
+
+        public void Handle(AppSettingUpdatedEvent message)
+        {
+            Console.WriteLine($"AppSetting Key: {message.Key} Value: {message.Value} has been successfully updated");
         }
     }
 }

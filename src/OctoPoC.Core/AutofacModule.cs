@@ -4,6 +4,7 @@ using OctoPoC.Core.Environments;
 using OctoPoC.Core.PowerShell;
 using OctoPoC.Core.Projects;
 using OctoPoC.Core.ReadmodelGeneration;
+using OctoPoC.Core.Settings;
 using OctoPoC.Core.Websites;
 
 namespace OctoPoC.Core
@@ -15,6 +16,7 @@ namespace OctoPoC.Core
             builder.RegisterType<EnvironmentActor>();
             builder.RegisterType<CloudRegionActor>();
             builder.RegisterType<ListeningTentacleActor>();
+            builder.RegisterType<SettingActor>();
             builder.RegisterType<AppSettingAuditableActor>();
             builder.RegisterType<AppSettingNonAuditableActor>();
             builder.RegisterType<ProjectActor>();
