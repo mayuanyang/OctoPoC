@@ -1,4 +1,6 @@
-﻿using OctoPoC.Messages.Events;
+﻿using System;
+using System.Collections.Generic;
+using OctoPoC.Messages.Events;
 
 namespace OctoPoC.Core.ReadmodelGeneration
 {
@@ -6,5 +8,7 @@ namespace OctoPoC.Core.ReadmodelGeneration
     {
         void Add(AppSettingAddedEvent evt);
         void Update(AppSettingUpdatedEvent evt);
+        IEnumerable<ProjectAppSetting> GetAllAppSettings(Guid projectId);
+
     }
 }

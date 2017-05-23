@@ -11,7 +11,7 @@ using OctoPoC.Messages.Events;
 
 namespace OctoPoC.Core.Projects
 {
-    public class ProjectActor : PersistentActor
+    public partial class ProjectActor : PersistentActor
     {
         private IActorRef _sender;
         private string _currentVersion = "";
@@ -42,6 +42,10 @@ namespace OctoPoC.Core.Projects
                 else if (evt.Event is AppSettingAddedEvent)
                 {
                     Apply((AppSettingAddedEvent)evt.Event);
+                }
+                else if (evt.Event is AppSettingUpdatedEvent)
+                {
+                    Apply((AppSettingUpdatedEvent)evt.Event);
                 }
             }
             return true;
@@ -103,41 +107,12 @@ namespace OctoPoC.Core.Projects
             _currentVersion = evt.Version;
             _sender.Tell(evt);
         }
-
-        private void ApplyChange(AppSettingAddedEvent evt)
-        {
-            Console.WriteLine(
-                $"New setting is added, Key: {evt.Key} Value: {evt.Value}");
-            _sender.Tell(evt);
-            _appSettingAuditableActor.Tell(evt);
-            _appSettingNonAuditableActor.Tell(evt);
-        }
-
-        private void ApplyChange(AppSettingUpdatedEvent evt)
-        {
-            Console.WriteLine(
-                $"New setting is added, Key: {evt.Key} Value: {evt.Value}");
-            _sender.Tell(evt);
-            _appSettingAuditableActor.Tell(evt);
-            _appSettingNonAuditableActor.Tell(evt);
-        }
-
+        
         private void Apply(WebsiteDeployedEvent evt)
         {
             _currentVersion = evt.Version;
             Console.WriteLine($"AggregateRoot Project is being reloaded, applying version number {evt.Version}");
         }
-
-        private void Apply(AppSettingAddedEvent evt)
-        {
-            // Nothing need to be done now
-        }
-
-        private void Apply(AppSettingUpdatedEvent evt)
-        {
-            // Nothing need to be done now
-        }
-
 
         public override string PersistenceId { get; }
         

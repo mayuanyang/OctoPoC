@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Configuration;
 using Akka.Actor;
 using Akka.DI.Core;
 using OctoPoC.Core.DeploymentTargets;
 using OctoPoC.Core.Projects;
+using OctoPoC.Core.ReadLayer;
 using OctoPoC.Messages.Commands;
+using OctoPoC.Messages.RequestResponses;
 
 namespace OctoPoC.ListeningTentacle
 {
@@ -41,7 +44,13 @@ namespace OctoPoC.ListeningTentacle
             {
                 var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
                 project.Tell(x, Sender);
+            });
 
+            Receive<GetAllAppSettingsRequest>(x =>
+            {
+                var settingQueryActor = Context.ActorOf(Context.DI().Props<AppSettingsReadActor>(),
+                    $"setting-reader-{Guid.NewGuid()}");
+                settingQueryActor.Tell(x, Sender);
             });
         }
     }

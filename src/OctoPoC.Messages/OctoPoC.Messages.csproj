@@ -59,6 +59,9 @@
     <Compile Include="MessageContracts\IEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\UpdateAppSettingCommand.cs" />
+    <Compile Include="RequestResponses\GetAllAppSettingsResponse.cs" />
+    <Compile Include="RequestResponses\GetAllAppSettingsRequest.cs" />
+    <Compile Include="RequestResponses\ProjectAppSettingDto.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

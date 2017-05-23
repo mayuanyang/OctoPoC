@@ -3,7 +3,7 @@
 namespace OctoPoC.Core.ReadmodelGeneration
 {
 
-    public class SettingDto
+    public class ProjectAppSetting
     {
         public Guid ProjectId { get; }
         public string Key { get; }
@@ -12,7 +12,7 @@ namespace OctoPoC.Core.ReadmodelGeneration
         public DateTimeOffset RecordTime { get; internal set; }
         public string Operation { get; internal set; }
 
-        public SettingDto(Guid projectId, string key, string value, string version, DateTimeOffset recordTime, string operation)
+        public ProjectAppSetting(Guid projectId, string key, string value, string version, DateTimeOffset recordTime, string operation)
         {
             ProjectId = projectId;
             Key = key;

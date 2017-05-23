@@ -2,6 +2,7 @@
 using Akka.Actor;
 using OctoPoC.Messages.Commands;
 using OctoPoC.Messages.Events;
+using OctoPoC.Messages.RequestResponses;
 
 namespace OctoPoC.Manager
 {
@@ -11,7 +12,8 @@ namespace OctoPoC.Manager
         IHandle<DeployWebsiteCommand>, 
         IHandle<WebsiteDeployedEvent>,
         IHandle<AddAppSettingCommand>,
-        IHandle<AppSettingAddedEvent>
+        IHandle<AppSettingAddedEvent>,
+        IHandle<GetAllAppSettingsRequest>
     {
         private readonly ActorSelection _cloudServer;
         private readonly ActorSelection _listeningTentacle;
@@ -61,6 +63,11 @@ namespace OctoPoC.Manager
         public void Handle(AppSettingUpdatedEvent message)
         {
             Console.WriteLine($"AppSetting Key: {message.Key} Value: {message.Value} has been successfully updated");
+        }
+
+        public void Handle(GetAllAppSettingsRequest message)
+        {
+            _listeningTentacle.Tell(message, Sender);
         }
     }
 }

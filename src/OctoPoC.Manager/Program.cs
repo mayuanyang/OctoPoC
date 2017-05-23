@@ -3,6 +3,7 @@ using Akka.Actor;
 using Akka.Configuration;
 using OctoPoC.Core.Projects;
 using OctoPoC.Messages.Commands;
+using OctoPoC.Messages.RequestResponses;
 
 namespace OctoPoC.Manager
 {
@@ -28,6 +29,7 @@ akka {
             Console.WriteLine("2: Deploy a Demo website");
             Console.WriteLine("3: Add a setting");
             Console.WriteLine("4: Update a setting");
+            Console.WriteLine("5: Get all settings");
             var option = Console.ReadLine();
             int version = 1;
             
@@ -51,7 +53,7 @@ akka {
                         var key = Console.ReadLine();
                         Console.WriteLine("Enter the value");
                         var value = Console.ReadLine();
-                        stub.Tell(new AddAppSettingCommand(Guid.NewGuid(), key, value, "1", DateTimeOffset.Now));
+                        stub.Tell(new AddAppSettingCommand(Guid.Parse("30a37555-780a-4748-962c-26a4d163f56c"), key, value, "1", DateTimeOffset.Now));
                     }
                     else if (option == "4")
                     {
@@ -59,7 +61,22 @@ akka {
                         var key = Console.ReadLine();
                         Console.WriteLine("Enter the value");
                         var value = Console.ReadLine();
-                        stub.Tell(new UpdateAppSettingCommand(Guid.NewGuid(), key, value, "1", DateTimeOffset.Now));
+                        stub.Tell(new UpdateAppSettingCommand(Guid.Parse("30a37555-780a-4748-962c-26a4d163f56c"), key, value, "1", DateTimeOffset.Now));
+                    }
+                    else if (option == "5")
+                    {
+                        var response = stub.Ask<GetAllAppSettingsResponse>(new GetAllAppSettingsRequest(Guid.Parse("30a37555-780a-4748-962c-26a4d163f56c"))).Result;
+                        Console.WriteLine("The project settins");
+                        foreach (var  setting in response.ProjectAppSettings)
+                        {
+                            Console.WriteLine($"Key: {setting.Key} Value: {setting.Value} RecordTime: {setting.RecordTime}");
+                        }
+                        Console.WriteLine();
+                        Console.WriteLine("The project settins audit trail");
+                        foreach (var setting in response.AuditableProjectAppSettings)
+                        {
+                            Console.WriteLine($"Key: {setting.Key} Value: {setting.Value} RecordTime: {setting.RecordTime} Operation: {setting.Operation}");
+                        }
                     }
                     option = Console.ReadLine();
                 }
