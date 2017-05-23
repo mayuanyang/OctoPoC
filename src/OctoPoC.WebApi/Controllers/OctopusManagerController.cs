@@ -1,18 +1,21 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Akka.Actor;
-using OctoPoC.Core.DeploymentTargets;
-using OctoPoC.Messages.Commands;
+using OctoPoC.Messages.RequestResponses;
 
 namespace OctoPoC.WebApi.Controllers
 {
     public class OctopusManagerController : ApiController
     {
         private readonly ActorSystem _actorSystem;
-
+        private readonly ActorSelection _stub;
+        
         public OctopusManagerController(ActorSystem actorSystem)
         {
             _actorSystem = actorSystem;
+            var path = "/user/stub";
+            _stub = _actorSystem.ActorSelection(path);
         }
         [HttpPost]
         public Task ConnectAllTargets()
@@ -21,11 +24,11 @@ namespace OctoPoC.WebApi.Controllers
         }
 
         [HttpGet]
-        public Task<string> Get()
+        public async Task<GetAllAppSettingsResponse> GetAllSettings()
         {
-            var cloudActor = _actorSystem.ActorOf<CloudRegionActor>();
-            cloudActor.Tell(new ReportHeartbeatCommand());
-            return Task.FromResult("hello world");
+            
+            var response = await _stub.Ask<GetAllAppSettingsResponse>(new GetAllAppSettingsRequest(Guid.Parse("30a37555-780a-4748-962c-26a4d163f56c")));
+            return response;
         }
     }
 }

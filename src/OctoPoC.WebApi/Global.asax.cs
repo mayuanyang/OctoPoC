@@ -35,6 +35,7 @@ akka {
 ");
             
             var system = ActorSystem.Create("OctopusManager", config);
+            var stub = system.ActorOf<StubActor>("stub");
             builder.RegisterInstance(system).SingleInstance();
             var container = builder.Build();
             

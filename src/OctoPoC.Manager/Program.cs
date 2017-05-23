@@ -35,7 +35,7 @@ akka {
             
             using (var system = ActorSystem.Create("OctopusManager", config))
             {
-                var stub = system.ActorOf<StubActor>($"stub");
+                var stub = system.ActorOf<StubActor>("stub");
                 while (true)
                 {
                     if (option == "1")
