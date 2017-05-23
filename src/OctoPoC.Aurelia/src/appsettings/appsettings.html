@@ -49,7 +49,7 @@
           <tr  repeat.for="setting of settings.difference">
             <td>${setting.key}</td>
             <td>${setting.originalValue}</td>
-            <td>${setting.newValue}</td>
+            <td ><span class="${setting.originalValue == setting.newValue ? '' : 'label-warning'}">${setting.newValue}</span></td>
             <td>${setting.recordTime}</td>
           </tr>
         </table>
