@@ -70,8 +70,15 @@
     <Compile Include="Environments\InMemoryEnvironmentRepo.cs" />
     <Compile Include="PowerShell\PowerShellActor.cs" />
     <Compile Include="Projects\ProjectActor.cs" />
-    <Compile Include="ReadmodelGeneration\AppSettingReadmodelActor.cs" />
-    <Compile Include="Settings\AppSettingActor.cs" />
+    <Compile Include="ReadLayer\AppSettingsReadActor.cs" />
+    <Compile Include="ReadmodelGeneration\AppSettingNonAuditableActor.cs" />
+    <Compile Include="ReadmodelGeneration\AppSettingAuditableActor.cs" />
+    <Compile Include="ReadmodelGeneration\INonAuditableSettingsRepo.cs" />
+    <Compile Include="ReadmodelGeneration\IAuditableSettingsRepo.cs" />
+    <Compile Include="ReadmodelGeneration\AuditableSettingsRepo.cs" />
+    <Compile Include="ReadmodelGeneration\NonAuditableSettingsRepo.cs" />
+    <Compile Include="ReadmodelGeneration\ISettingsRepo.cs" />
+    <Compile Include="ReadmodelGeneration\SettingDto.cs" />
     <Compile Include="DeploymentTargets\CloudRegionActor.cs" />
     <Compile Include="DeploymentTargets\ListeningTentacleActor.cs" />
     <Compile Include="EventStore\EventRecord.cs" />

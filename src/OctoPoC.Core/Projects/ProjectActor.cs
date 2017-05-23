@@ -3,6 +3,7 @@ using Akka.Actor;
 using Akka.DI.Core;
 using Akka.Persistence;
 using OctoPoC.Core.EventStore;
+using OctoPoC.Core.ReadmodelGeneration;
 using OctoPoC.Core.Websites;
 using OctoPoC.Messages.Commands;
 using OctoPoC.Messages.Events;
@@ -13,12 +14,17 @@ namespace OctoPoC.Core.Projects
     {
         private IActorRef _sender;
         private string _currentVersion = "";
-        private IActorRef _websiteActor;
+        private IActorRef _websiteDeployActor;
+        private IActorRef _appSettingAuditableActor;
+        private IActorRef _appSettingNonAuditableActor;
+        
 
         public ProjectActor()
         {
             PersistenceId = "30a37555-780a-4748-962c-26a4d163f56c";
-            _websiteActor = Context.ActorOf(Context.DI().Props<DeployWebsiteActor>(), "WebsiteActor");
+            _websiteDeployActor = Context.ActorOf(Context.DI().Props<DeployWebsiteActor>(), "WebsiteActor");
+            _appSettingAuditableActor = Context.ActorOf(Context.DI().Props<AppSettingAuditableActor>(), "appsetting-auditable-readmodel");
+            _appSettingNonAuditableActor = Context.ActorOf(Context.DI().Props<AppSettingNonAuditableActor>(), "appsetting-nonauditable-readmodel");
         }
     
         protected override bool ReceiveRecover(object message)
@@ -44,12 +50,12 @@ namespace OctoPoC.Core.Projects
             if (message is DeployWebsiteCommand)
             {
                 _sender = Sender;
-                _websiteActor.Tell(message, Self);
+                _websiteDeployActor.Tell(message, Self);
             }
             else if (message is WebsiteDeployedEvent)
             {
                 var evt = (WebsiteDeployedEvent) message;
-                Persist<EventRecord>(new EventRecord(Guid.NewGuid(), 1, aggregateId, evt), x =>
+                Persist<EventRecord>(new EventRecord(Guid.NewGuid(), 1, aggregateId, evt, DateTimeOffset.Now), x =>
                 {
                     ApplyChange((WebsiteDeployedEvent)x.Event);
                 });
@@ -59,12 +65,12 @@ namespace OctoPoC.Core.Projects
             {
                 _sender = Sender;
                 var m = (AddAppSettingCommand)message;
-                ApplyChange(new AppSettingAddedEvent(aggregateId, m.Key, m.Value));
+                ApplyChange(new AppSettingAddedEvent(aggregateId, m.Key, m.Value, _currentVersion, DateTimeOffset.Now));
             }
             else if (message is AppSettingAddedEvent)
             {
                 var evt = (AppSettingAddedEvent)message;
-                Persist<EventRecord>(new EventRecord(Guid.NewGuid(), 1, aggregateId, evt), x =>
+                Persist<EventRecord>(new EventRecord(Guid.NewGuid(), 1, aggregateId, evt, DateTimeOffset.Now), x =>
                 {
                     ApplyChange((AppSettingAddedEvent)x.Event);
                 });
@@ -85,6 +91,8 @@ namespace OctoPoC.Core.Projects
             Console.WriteLine(
                 $"New setting is added, Key: {evt.Key} Value: {evt.Value}");
             _sender.Tell(evt);
+            _appSettingAuditableActor.Tell(evt);
+            _appSettingNonAuditableActor.Tell(evt);
         }
 
         private void Apply(WebsiteDeployedEvent evt)

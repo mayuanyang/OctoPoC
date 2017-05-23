@@ -10,7 +10,8 @@ namespace OctoPoC.Manager
         IHandle<TargetPulsedEvent>, 
         IHandle<DeployWebsiteCommand>, 
         IHandle<WebsiteDeployedEvent>,
-        IHandle<AddAppSettingCommand>
+        IHandle<AddAppSettingCommand>,
+        IHandle<AppSettingAddedEvent>
     {
         private readonly ActorSelection _cloudServer;
         private readonly ActorSelection _listeningTentacle;
@@ -45,6 +46,11 @@ namespace OctoPoC.Manager
         public void Handle(AddAppSettingCommand message)
         {
             _listeningTentacle.Tell(message);
+        }
+
+        public void Handle(AppSettingAddedEvent message)
+        {
+            Console.WriteLine($"AppSetting Key: {message.Key} Value: {message.Value} has been successfully added");
         }
     }
 }

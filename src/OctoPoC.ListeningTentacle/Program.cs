@@ -2,6 +2,7 @@
 using Akka.Configuration;
 using Akka.DI.AutoFac;
 using Autofac;
+using Microsoft.Win32;
 using OctoPoC.Core;
 
 namespace OctoPoC.ListeningTentacle
@@ -22,8 +23,7 @@ akka {
             public-hostname = localhost
         }
     }
-}
-");
+}");
 
             var builder = new Autofac.ContainerBuilder();
             builder.RegisterModule<AutofacModule>();

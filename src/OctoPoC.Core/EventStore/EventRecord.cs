@@ -9,13 +9,15 @@ namespace OctoPoC.Core.EventStore
         public long Sequence { get; }
         public Guid AggregateId { get; }
         public IEvent Event { get; }
+        public DateTimeOffset RecordTime { get; }
 
-        public EventRecord(Guid id, long sequence, Guid aggregateId, IEvent @event)
+        public EventRecord(Guid id, long sequence, Guid aggregateId, IEvent @event, DateTimeOffset recordTime)
         {
             Id = id;
             Sequence = sequence;
             AggregateId = aggregateId;
             Event = @event;
+            RecordTime = recordTime;
         }
     }
 
