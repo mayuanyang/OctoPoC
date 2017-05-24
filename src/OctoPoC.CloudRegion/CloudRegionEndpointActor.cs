@@ -17,6 +17,7 @@ namespace OctoPoC.CloudRegion
 
             Receive<ReportHeartbeatCommand>(x =>
             {
+                Console.WriteLine($"Received {nameof(ReportHeartbeatCommand)} from server");
                 var cloudActorProps = Context.DI().Props<CloudRegionActor>();
                 var cloudActor = Context.ActorOf(cloudActorProps, "CloudRegion");
                 cloudActor.Tell(x, Sender);

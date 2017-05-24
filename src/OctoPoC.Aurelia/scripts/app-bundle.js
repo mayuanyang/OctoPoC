@@ -126,6 +126,69 @@ define('appsettings/appsettings',['exports', '../modules/appsetting.service', 'a
     return Appsettings;
   }()) || _class);
 });
+define('authentication/authentication',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var Authentication = exports.Authentication = function () {
+    function Authentication() {
+      _classCallCheck(this, Authentication);
+
+      this.title = "Authentication";
+      this.description = "This pratice is to use Auth0 for the authentication, currently will only support Google";
+      this.items = [{ description: "Integrete with Firebase authentication" }, { description: "Auth0 implementation" }];
+
+      this.user = JSON.parse(localStorage.getItem("user"));
+      console.log(this.user);
+    }
+
+    Authentication.prototype.login = function login() {
+      var _this = this;
+
+      var provider = void 0;
+
+      provider = new firebase.auth.GoogleAuthProvider();
+
+      firebase.auth().signInWithPopup(provider).then(function (result) {
+        _this.authToken = result.credential.accessToken;
+
+        _this.user = result.user;
+        localStorage.setItem("user", JSON.stringify(result.user));
+
+        _this.userLoggedIn = true;
+        console.log(_this.user);
+      }).catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        var email = error.email;
+        var credential = error.credential;
+      });
+    };
+
+    Authentication.prototype.logout = function logout() {
+      var _this2 = this;
+
+      firebase.auth().signOut().then(function () {
+        _this2.userLoggedIn = false;
+        localStorage.clear();
+        _this2.user = null;
+      }).catch(function (error) {
+        throw new Error(error);
+      });
+    };
+
+    return Authentication;
+  }();
+});
 define('contactme/contactme',['exports'], function (exports) {
   'use strict';
 
@@ -208,69 +271,6 @@ define('dynamicloader/dynamic-loader',["exports"], function (exports) {
     };
 
     return DynamicLoader;
-  }();
-});
-define('authentication/authentication',["exports"], function (exports) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var Authentication = exports.Authentication = function () {
-    function Authentication() {
-      _classCallCheck(this, Authentication);
-
-      this.title = "Authentication";
-      this.description = "This pratice is to use Auth0 for the authentication, currently will only support Google";
-      this.items = [{ description: "Integrete with Firebase authentication" }, { description: "Auth0 implementation" }];
-
-      this.user = JSON.parse(localStorage.getItem("user"));
-      console.log(this.user);
-    }
-
-    Authentication.prototype.login = function login() {
-      var _this = this;
-
-      var provider = void 0;
-
-      provider = new firebase.auth.GoogleAuthProvider();
-
-      firebase.auth().signInWithPopup(provider).then(function (result) {
-        _this.authToken = result.credential.accessToken;
-
-        _this.user = result.user;
-        localStorage.setItem("user", JSON.stringify(result.user));
-
-        _this.userLoggedIn = true;
-        console.log(_this.user);
-      }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-      });
-    };
-
-    Authentication.prototype.logout = function logout() {
-      var _this2 = this;
-
-      firebase.auth().signOut().then(function () {
-        _this2.userLoggedIn = false;
-        localStorage.clear();
-        _this2.user = null;
-      }).catch(function (error) {
-        throw new Error(error);
-      });
-    };
-
-    return Authentication;
   }();
 });
 define('home/home',["exports"], function (exports) {
@@ -361,6 +361,71 @@ define('httppratice/http-pratice',['exports', '../modules/youtube.service', 'aur
     return HttpPratice;
   }()) || _class);
 });
+define('modules/appsetting.service',['exports', 'aurelia-fetch-client'], function (exports, _aureliaFetchClient) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.AppSettingService = undefined;
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var AppSettingService = exports.AppSettingService = function () {
+        function AppSettingService() {
+            _classCallCheck(this, AppSettingService);
+
+            this.webapiUrl = 'http://localhost:55696/api/OctopusManager';
+            this.client = new _aureliaFetchClient.HttpClient();
+        }
+
+        AppSettingService.prototype.fetch = function fetch() {
+            var result = this.client.fetch(this.webapiUrl);
+            return result;
+        };
+
+        return AppSettingService;
+    }();
+});
+define('modules/youtube.service',['exports', 'aurelia-fetch-client'], function (exports, _aureliaFetchClient) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.YoutubeService = undefined;
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var YoutubeService = exports.YoutubeService = function () {
+        function YoutubeService() {
+            _classCallCheck(this, YoutubeService);
+
+            this.webapiUrl = 'https://www.googleapis.com/youtube/v3/search';
+            this.api_key = 'AIzaSyDrPpZkJ6tBkdCemWS3jXu6zKTipcZA7SQ';
+            this.client = new _aureliaFetchClient.HttpClient();
+        }
+
+        YoutubeService.prototype.fetch = function fetch(term) {
+            console.log(term);
+            var url = this.webapiUrl + '?q=' + term + '&part=snippet&maxResults=25&key=' + this.api_key;
+            var result = this.client.fetch(url);
+
+            console.log(result);
+            return result;
+        };
+
+        return YoutubeService;
+    }();
+});
 define('navbar/navbar',["exports", "aurelia-framework"], function (exports, _aureliaFramework) {
   "use strict";
 
@@ -431,71 +496,6 @@ define('navbar/navbar',["exports", "aurelia-framework"], function (exports, _aur
     }
   })), _class);
 });
-define('modules/appsetting.service',['exports', 'aurelia-fetch-client'], function (exports, _aureliaFetchClient) {
-    'use strict';
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.AppSettingService = undefined;
-
-    function _classCallCheck(instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-        }
-    }
-
-    var AppSettingService = exports.AppSettingService = function () {
-        function AppSettingService() {
-            _classCallCheck(this, AppSettingService);
-
-            this.webapiUrl = 'http://localhost:55696/api/OctopusManager';
-            this.client = new _aureliaFetchClient.HttpClient();
-        }
-
-        AppSettingService.prototype.fetch = function fetch() {
-            var result = this.client.fetch(this.webapiUrl);
-            return result;
-        };
-
-        return AppSettingService;
-    }();
-});
-define('modules/youtube.service',['exports', 'aurelia-fetch-client'], function (exports, _aureliaFetchClient) {
-    'use strict';
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.YoutubeService = undefined;
-
-    function _classCallCheck(instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-        }
-    }
-
-    var YoutubeService = exports.YoutubeService = function () {
-        function YoutubeService() {
-            _classCallCheck(this, YoutubeService);
-
-            this.webapiUrl = 'https://www.googleapis.com/youtube/v3/search';
-            this.api_key = 'AIzaSyDrPpZkJ6tBkdCemWS3jXu6zKTipcZA7SQ';
-            this.client = new _aureliaFetchClient.HttpClient();
-        }
-
-        YoutubeService.prototype.fetch = function fetch(term) {
-            console.log(term);
-            var url = this.webapiUrl + '?q=' + term + '&part=snippet&maxResults=25&key=' + this.api_key;
-            var result = this.client.fetch(url);
-
-            console.log(result);
-            return result;
-        };
-
-        return YoutubeService;
-    }();
-});
 define('nosql/nosql',["exports"], function (exports) {
   "use strict";
 
@@ -551,15 +551,6 @@ define('nosql/nosql',["exports"], function (exports) {
 
     return Nosql;
   }();
-});
-define('resources/index',["exports"], function (exports) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.configure = configure;
-  function configure(config) {}
 });
 define('readme/read-me',["exports", "aurelia-framework"], function (exports, _aureliaFramework) {
   "use strict";
@@ -660,6 +651,15 @@ define('readme/read-me',["exports", "aurelia-framework"], function (exports, _au
     }
   })), _class);
 });
+define('resources/index',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.configure = configure;
+  function configure(config) {}
+});
 define('validation/validation',['exports', 'aurelia-validation', 'aurelia-framework'], function (exports, _aureliaValidation, _aureliaFramework) {
   'use strict';
 
@@ -712,12 +712,12 @@ define('validation/validation',['exports', 'aurelia-validation', 'aurelia-framew
     return Validation;
   }()) || _class);
 });
-define('text!style.css', ['module'], function(module) { module.exports = ".row{\r\n    margin: 0;\r\n}\r\n\r\n.navbar{\r\n    margin-bottom: 0px;\r\n    \r\n    font-size: 16px;\r\n}\r\n\r\nvideo {\r\n    width: 100%;\r\n    overflow: auto;\r\n    -webkit-overflow-scrolling: touch;\r\n    top:50px; /* start 470px below top left corner */\r\n    bottom: 0px; /* This is the trick - specify bottom instead of height */\r\n    left:0px;\r\n}\r\n\r\n.component-box{\r\n    margin: 10px 10px 10px 10px;\r\n    padding-top: 10px;\r\n    padding-bottom: 10px;\r\n    background-color: #fff;\r\n    border-color: #ddd;\r\n    border-width: 1px;\r\n    border-radius: 4px 4px 0 0;\r\n    -webkit-box-shadow: none;\r\n    box-shadow: none;\r\n    border-style: solid;\r\n}\r\n\r\n.grid{\r\n    margin-top: 20px;\r\n    display: block;\r\n}\r\n\r\n.grid-item{\r\n    width: 33.33%;\r\n    display: block;\r\n    float: left;\r\n}\r\n\r\n.pod__item__image {\r\n    position: relative;\r\n    width: 200px;\r\n    height: 200px;\r\n    margin: 0 auto 30px;\r\n    border-radius: 1000px;\r\n    overflow: hidden;\r\n    background-color: #003e69;\r\n}\r\n\r\n.pod__item__heading {\r\n    font-size: 20px;\r\n    line-height: 1em;\r\n    margin-bottom: .5em;\r\n    text-transform: uppercase;\r\n    color: #003e69;\r\n    text-align: center;\r\n        font-weight: 700;\r\n}\r\n\r\n.pod__item__heading1{\r\n    color: #116900;\r\n}\r\n\r\n.pod__item__heading2{\r\n    color: #003e69;\r\n}\r\n\r\n.pod__item__heading3{\r\n    color: #8a6d3b;\r\n}\r\n\r\n.pod__item__1{\r\n    background-color: #116900;\r\n}\r\n\r\n\r\n\r\n.pod__item__2{\r\n    background-color: #003e69;\r\n    color: #003e69;\r\n}\r\n\r\n.pod__item__3{\r\n    background-color: #8a6d3b;\r\n    color: #8a6d3b;\r\n}\r\n\r\n.pod__item__image__mask {\r\n    position: absolute;\r\n    top: 2px;\r\n    right: 2px;\r\n    bottom: 2px;\r\n    left: 2px;\r\n    background-color: #fff;\r\n    border-radius: 1000px;\r\n}\r\n\r\n.pod__item__image img {\r\n    width: 138px;\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    -webkit-transform: translate(-50%,-50%);\r\n    transform: translate(-50%,-50%);\r\n}\r\n\r\n.project-description {\r\n    min-height: 200px;\r\n    color: white;\r\n    margin: 0;\r\n    padding: 0;\r\n    background-image: -webkit-gradient(linear, top, from(#6E4D9B), to(#E82887));\r\n    background-image: -webkit-linear-gradient(top, #6E4D9B, #E82887);\r\n    background-image: -moz-linear-gradient(top, #6E4D9B, #E82887);\r\n    background-image: linear-gradient(to top, #6E4D9B, #E82887);\r\n}\r\n\r\n.project-description .big-title{\r\n    font-size: 40px;\r\n    text-align: center;\r\n    color: white;\r\n}\r\n\r\n.project-description .big-title .small{\r\n    font-size: 20px;\r\n    text-align: center;\r\n    color: white;\r\n}\r\n\r\n.project-description .content{\r\n    font-size: 20px;\r\n    text-align: center;\r\n    color: white;\r\n}\r\n\r\n\r\n/*Business Card Css */\r\n.business-card {\r\n  border: 1px solid #cccccc;\r\n  background: #f8f8f8;\r\n  padding: 10px;\r\n  border-radius: 4px;\r\n  margin-bottom: 10px;\r\n}\r\n.profile-img {\r\n  height: 120px;\r\n  background: white;\r\n}\r\n.job {\r\n  color: #666666;\r\n  font-size: 17px;\r\n}\r\n.mail {\r\n  font-size: 16px;\r\n }\r\n\r\n.col-sm-6{\r\n    padding-left: 0px;\r\n}\r\n\r\n.video-thumb{\r\n    width: 350px;\r\n}"; });
 define('text!app.html', ['module'], function(module) { module.exports = "<template><require from=\"navbar/navbar\"></require><require from=\"style.css\"></require><div class=\"row\"><navbar router.bind=\"router\"></navbar></div><div class=\"row router-view\"><router-view></router-view></div></template>"; });
+define('text!style.css', ['module'], function(module) { module.exports = ".row{\r\n    margin: 0;\r\n}\r\n\r\n.navbar{\r\n    margin-bottom: 0px;\r\n    \r\n    font-size: 16px;\r\n}\r\n\r\nvideo {\r\n    width: 100%;\r\n    overflow: auto;\r\n    -webkit-overflow-scrolling: touch;\r\n    top:50px; /* start 470px below top left corner */\r\n    bottom: 0px; /* This is the trick - specify bottom instead of height */\r\n    left:0px;\r\n}\r\n\r\n.component-box{\r\n    margin: 10px 10px 10px 10px;\r\n    padding-top: 10px;\r\n    padding-bottom: 10px;\r\n    background-color: #fff;\r\n    border-color: #ddd;\r\n    border-width: 1px;\r\n    border-radius: 4px 4px 0 0;\r\n    -webkit-box-shadow: none;\r\n    box-shadow: none;\r\n    border-style: solid;\r\n}\r\n\r\n.grid{\r\n    margin-top: 20px;\r\n    display: block;\r\n}\r\n\r\n.grid-item{\r\n    width: 33.33%;\r\n    display: block;\r\n    float: left;\r\n}\r\n\r\n.pod__item__image {\r\n    position: relative;\r\n    width: 200px;\r\n    height: 200px;\r\n    margin: 0 auto 30px;\r\n    border-radius: 1000px;\r\n    overflow: hidden;\r\n    background-color: #003e69;\r\n}\r\n\r\n.pod__item__heading {\r\n    font-size: 20px;\r\n    line-height: 1em;\r\n    margin-bottom: .5em;\r\n    text-transform: uppercase;\r\n    color: #003e69;\r\n    text-align: center;\r\n        font-weight: 700;\r\n}\r\n\r\n.pod__item__heading1{\r\n    color: #116900;\r\n}\r\n\r\n.pod__item__heading2{\r\n    color: #003e69;\r\n}\r\n\r\n.pod__item__heading3{\r\n    color: #8a6d3b;\r\n}\r\n\r\n.pod__item__1{\r\n    background-color: #116900;\r\n}\r\n\r\n\r\n\r\n.pod__item__2{\r\n    background-color: #003e69;\r\n    color: #003e69;\r\n}\r\n\r\n.pod__item__3{\r\n    background-color: #8a6d3b;\r\n    color: #8a6d3b;\r\n}\r\n\r\n.pod__item__image__mask {\r\n    position: absolute;\r\n    top: 2px;\r\n    right: 2px;\r\n    bottom: 2px;\r\n    left: 2px;\r\n    background-color: #fff;\r\n    border-radius: 1000px;\r\n}\r\n\r\n.pod__item__image img {\r\n    width: 138px;\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    -webkit-transform: translate(-50%,-50%);\r\n    transform: translate(-50%,-50%);\r\n}\r\n\r\n.project-description {\r\n    min-height: 200px;\r\n    color: white;\r\n    margin: 0;\r\n    padding: 0;\r\n    background-image: -webkit-gradient(linear, top, from(#6E4D9B), to(#E82887));\r\n    background-image: -webkit-linear-gradient(top, #6E4D9B, #E82887);\r\n    background-image: -moz-linear-gradient(top, #6E4D9B, #E82887);\r\n    background-image: linear-gradient(to top, #6E4D9B, #E82887);\r\n}\r\n\r\n.project-description .big-title{\r\n    font-size: 40px;\r\n    text-align: center;\r\n    color: white;\r\n}\r\n\r\n.project-description .big-title .small{\r\n    font-size: 20px;\r\n    text-align: center;\r\n    color: white;\r\n}\r\n\r\n.project-description .content{\r\n    font-size: 20px;\r\n    text-align: center;\r\n    color: white;\r\n}\r\n\r\n\r\n/*Business Card Css */\r\n.business-card {\r\n  border: 1px solid #cccccc;\r\n  background: #f8f8f8;\r\n  padding: 10px;\r\n  border-radius: 4px;\r\n  margin-bottom: 10px;\r\n}\r\n.profile-img {\r\n  height: 120px;\r\n  background: white;\r\n}\r\n.job {\r\n  color: #666666;\r\n  font-size: 17px;\r\n}\r\n.mail {\r\n  font-size: 16px;\r\n }\r\n\r\n.col-sm-6{\r\n    padding-left: 0px;\r\n}\r\n\r\n.video-thumb{\r\n    width: 350px;\r\n}"; });
 define('text!aboutme/aboutme.html', ['module'], function(module) { module.exports = "<template><require from=\"../readme/read-me\"></require><div class=\"container\"><read-me title.bind=\"title\" description.bind=\"description\" items.bind=\"items\"></read-me></div></template>"; });
-define('text!appsettings/appsettings.html', ['module'], function(module) { module.exports = "<template><div class=\"container\"><h3>App Settings</h3><button class=\"btn btn-primary\" click.trigger=\"getSettings()\">Get Settings</button><div class=\"row\" style=\"margin-bottom:10px;margin-top:10px\"><div class=\"col-md-6\"><h4>App Settings</h4><table class=\"table table-bordered\"><tr><th>Key</th><th>Value</th><th>Time</th></tr><tr repeat.for=\"setting of settings.projectAppSettings\"><td>${setting.key}</td><td>${setting.value}</td><td>${setting.recordTime}</td></tr></table></div><div class=\"col-md-6\"><h4>App Settings Audit Trail</h4><table class=\"table table-bordered\"><tr><th>Key</th><th>Value</th><th>Time</th><th>Operation</th></tr><tr class=\"${setting.operation == 'UPDATE' ? 'warning' : '' }\" repeat.for=\"setting of settings.auditableProjectAppSettings\"><td>${setting.key}</td><td>${setting.value}</td><td>${setting.recordTime}</td><td>${setting.operation}</td></tr></table></div></div><div class=\"row\" style=\"margin-bottom:10px;margin-top:10px\"><h4>App Settings Diff</h4><table class=\"table table-bordered\"><tr><th>Key</th><th>Original Value</th><th>New Value</th><th>Last Modified Date</th></tr><tr repeat.for=\"setting of settings.difference\"><td>${setting.key}</td><td>${setting.originalValue}</td><td><span class=\"${setting.originalValue == setting.newValue ? '' : 'label-warning'}\">${setting.newValue}</span></td><td>${setting.recordTime}</td></tr></table></div></div></template>"; });
-define('text!contactme/contactme.html', ['module'], function(module) { module.exports = "<template><require from=\"../readme/read-me\"></require><div class=\"container\"><read-me title.bind=\"title\" description.bind=\"description\" items.bind=\"items\"></read-me></div><br><div class=\"container\"><div class=\"row\"><div class=\"col-sm-6\"><div class=\"business-card\"><div class=\"media\"><div class=\"media-left\"><img class=\"media-object img-circle profile-img\" src=\"${photoURL}\"></div><div class=\"media-body\"><h2 class=\"media-heading\">${displayName}</h2><div class=\"mail\"><a href=\"mailto:eddy.ma616@gmail.com\">${email}</a></div></div></div></div></div></div></div></template>"; });
+define('text!appsettings/appsettings.html', ['module'], function(module) { module.exports = "<template><div class=\"container\"><h3>App Settings</h3><button class=\"btn btn-primary\" click.trigger=\"getSettings()\">Get Settings</button><div class=\"row\" style=\"margin-bottom:10px;margin-top:10px\"><div class=\"col-md-6\"><h4>App Settings (Read Model 1)</h4><table class=\"table table-bordered\"><tr><th>Key</th><th>Value</th><th>Time</th></tr><tr repeat.for=\"setting of settings.projectAppSettings\"><td>${setting.key}</td><td>${setting.value}</td><td>${setting.recordTime}</td></tr></table></div><div class=\"col-md-6\"><h4>App Settings Audit Trail (Read Model 2)</h4><table class=\"table table-bordered\"><tr><th>Key</th><th>Value</th><th>Time</th><th>Operation</th></tr><tr class=\"${setting.operation == 'UPDATE' ? 'warning' : '' }\" repeat.for=\"setting of settings.auditableProjectAppSettings\"><td>${setting.key}</td><td>${setting.value}</td><td>${setting.recordTime}</td><td>${setting.operation}</td></tr></table></div></div><div class=\"row\" style=\"margin-bottom:10px;margin-top:10px\"><h4>App Settings Diff</h4><table class=\"table table-bordered\"><tr><th>Key</th><th>Original Value</th><th>New Value</th><th>Last Modified Date</th></tr><tr repeat.for=\"setting of settings.difference\"><td>${setting.key}</td><td>${setting.originalValue}</td><td><span class=\"${setting.originalValue == setting.newValue ? '' : 'label-warning'}\">${setting.newValue}</span></td><td>${setting.recordTime}</td></tr></table></div></div></template>"; });
 define('text!authentication/authentication.html', ['module'], function(module) { module.exports = "<template><require from=\"../readme/read-me\"></require><div class=\"container\"><read-me title.bind=\"title\" description.bind=\"description\" items.bind=\"items\"></read-me><button click.trigger=\"login()\" class=\"btn btn-primary\" if.bind=\"user == undefined\">Login</button> <button click.trigger=\"logout()\" class=\"btn btn-warning\" if.bind=\"user != undefined\">Logout</button></div><br><div class=\"container\" if.bind=\"user != undefined\"><div class=\"row\"><div class=\"col-sm-6\"><div class=\"business-card\"><div class=\"media\"><div class=\"media-left\"><img class=\"media-object img-circle profile-img\" src=\"${user.photoURL}\"></div><div class=\"media-body\"><h2 class=\"media-heading\">${user.displayName}</h2><div class=\"mail\"><a href=\"mailto:daniel@bla.ch\">${user.email}</a></div></div></div></div></div></div></div></template>"; });
+define('text!contactme/contactme.html', ['module'], function(module) { module.exports = "<template><require from=\"../readme/read-me\"></require><div class=\"container\"><read-me title.bind=\"title\" description.bind=\"description\" items.bind=\"items\"></read-me></div><br><div class=\"container\"><div class=\"row\"><div class=\"col-sm-6\"><div class=\"business-card\"><div class=\"media\"><div class=\"media-left\"><img class=\"media-object img-circle profile-img\" src=\"${photoURL}\"></div><div class=\"media-body\"><h2 class=\"media-heading\">${displayName}</h2><div class=\"mail\"><a href=\"mailto:eddy.ma616@gmail.com\">${email}</a></div></div></div></div></div></div></div></template>"; });
 define('text!dynamicloader/dynamic-loader.html', ['module'], function(module) { module.exports = "<template><require from=\"../readme/read-me\"></require><div class=\"container\"><read-me title.bind=\"title\" description.bind=\"description\" items.bind=\"items\"></read-me><h3>Components to be loaded</h3><ul class=\"list-group\"><li class=\"list-group-item\" repeat.for=\"component of components\"><div class=\"btn-group\" role=\"group\" aria-label=\"...\" style=\"float:right;margin-bottom:5px\"><button click.trigger=\"addComponent(component)\" class=\"btn btn-sm btn-success\">Add</button></div>${component.name}</li></ul></div><div class=\"row component-box\" repeat.for=\"vm of viewModels\"><button click.trigger=\"removeComponent($index)\" class=\"btn btn-sm btn-danger\">Remove</button><compose view-model.bind=\"vm.path\"></compose></div></template>"; });
 define('text!home/home.html', ['module'], function(module) { module.exports = "<template><div class=\"home\"><video loop=\"\" autoplay=\"\" id=\"slider-video\"><source src=\"https://s3-ap-southeast-2.amazonaws.com/tatts-group-website-storage/wp-content/uploads/2016/08/15114716/Tatts-Group-values-cutdown-960-V2.mp4\" type=\"video/mp4\">Your browser doesn't support HTML5 video tag</video><div class=\"container grid\"><div class=\"grid-item grid__item--third\"><div class=\"pod__item pod__item--purple js-wow fadeInUp\" data-wow-delay=\"0.1s\" data-wow-offset=\"20\" data-wow-duration=\"1s\" style=\"visibility:visible;animation-duration:1s;animation-delay:.1s;animation-name:fadeInUp\"><div class=\"pod__item__image pod__item__1\"><div class=\"pod__item__image__mask\"><img src=\"../assets/images/testability.png\" alt=\"testability\"></div></div><h4 class=\"pod__item__heading pod__item__heading1\">Testability</h4></div></div><div class=\"grid-item grid__item--third\"><div class=\"pod__item pod__item--purple js-wow fadeInUp\" data-wow-delay=\"0.1s\" data-wow-offset=\"20\" data-wow-duration=\"1s\" style=\"visibility:visible;animation-duration:1s;animation-delay:.1s;animation-name:fadeInUp\"><div class=\"pod__item__image pod__item__2\"><div class=\"pod__item__image__mask\"><img src=\"../assets/images/maintainability.jpg\" alt=\"Maintainability\"></div></div><h4 class=\"pod__item__heading pod__item__heading2\">Maintainability</h4></div></div><div class=\"grid-item grid__item--third\"><div class=\"pod__item pod__item--purple js-wow fadeInUp\" data-wow-delay=\"0.1s\" data-wow-offset=\"20\" data-wow-duration=\"1s\" style=\"visibility:visible;animation-duration:1s;animation-delay:.1s;animation-name:fadeInUp\"><div class=\"pod__item__image pod__item__3\"><div class=\"pod__item__image__mask\"><img src=\"../assets/images/extensibility.jpg\" alt=\"Extensibility\"></div></div><h4 class=\"pod__item__heading pod__item__heading3\">Extensibility</h4></div></div></div><div class=\"project-description\"><div class=\"big-title\">Aurelia allows us to focus on business logic, not on the framework - so concise and simple, yet so powerful and flexible!<br><small class=\"small\">Ats Uiboupin</small></div><div class=\"content\">This site is mainly setup for study purpose, it including the following items<ul><li>Router</li><li>Use http module to send request</li></ul></div></div></div></template>"; });
 define('text!httppratice/http-pratice.html', ['module'], function(module) { module.exports = "<template><require from=\"../readme/read-me\"></require><div class=\"container\"><read-me title.bind=\"title\" description.bind=\"description\" items.bind=\"items\"></read-me><h3>Youtube Search</h3><div class=\"input-group\"><span class=\"input-group-addon\" id=\"basic-addon1\">Search youtube</span> <input id=\"search-box\" type=\"text\" class=\"form-control\" placeholder=\"\" aria-describedby=\"basic-addon1\" keyup.trigger=\"onkeyup()\" value.bind=\"term\"></div><div class=\"row\" repeat.for=\"result of videos\" style=\"margin-bottom:10px;margin-top:10px\"><div class=\"col-md-6\"><a href=\"https://www.youtube.com/watch?v=${result.id.videoId}\" target=\"_blank\"><img src=\"${result.snippet.thumbnails.high.url}\" class=\"img-rounded video-thumb\" alt=\"\"></a></div><div class=\"col-md-6\"><a href=\"https://www.youtube.com/watch?v=${result.id.videoId}\" target=\"_blank\"><h3>${result.snippet.title}</h3></a><p>${result.snippet.description}</p></div></div></div></template>"; });

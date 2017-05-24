@@ -24,11 +24,13 @@ namespace OctoPoC.ListeningTentacle
 
             Receive<ReportHeartbeatCommand>(x =>
             {
+                Console.WriteLine($"Received {nameof(ReportHeartbeatCommand)} from server");
                 tentacleActor.Tell(x, Sender);
             });
 
             Receive<DeployWebsiteCommand>(x =>
             {
+                Console.WriteLine($"Received {nameof(DeployWebsiteCommand)} from server");
                 var project = Context.ActorOf(Context.DI().Props<ProjectActor>(), $"project-{Guid.NewGuid()}");
                 project.Tell(x, Sender);
             });
