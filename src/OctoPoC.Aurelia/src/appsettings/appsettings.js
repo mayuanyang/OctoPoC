@@ -8,13 +8,12 @@ export class Appsettings {
   }
 
   getSettings(){
-    console.log('sssss');
     var self = this;
     this.appsettingService.fetch()
       .then(response => response.json())
       .then(data => {
                 self.settings = data;
-                console.log(self.settings);
+                
             });;
   }
 }

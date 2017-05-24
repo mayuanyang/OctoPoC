@@ -115,13 +115,11 @@ define('appsettings/appsettings',['exports', '../modules/appsetting.service', 'a
     }
 
     Appsettings.prototype.getSettings = function getSettings() {
-      console.log('sssss');
       var self = this;
       this.appsettingService.fetch().then(function (response) {
         return response.json();
       }).then(function (data) {
         self.settings = data;
-        console.log(self.settings);
       });;
     };
 
